@@ -1,7 +1,7 @@
 import React from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
-import { Loader2, Upload, Check, X, AlertTriangle } from "lucide-react";
+import { Loader2, X, AlertTriangle } from "lucide-react";
 
 type UploadedImage = {
   file: File;
@@ -16,7 +16,7 @@ export default function AdImageGenerator() {
   const [numberOfAds, setNumberOfAds] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const [, setGeneratedImages] = useState<string[]>([]);
 
   const validateImage = (file: File): string | null => {
     if (!["image/jpeg", "image/png"].includes(file.type)) {
