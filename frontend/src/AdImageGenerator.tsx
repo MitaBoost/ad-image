@@ -1,4 +1,3 @@
-import React from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { Loader2, X, AlertTriangle } from "lucide-react";
