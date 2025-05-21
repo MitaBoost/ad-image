@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001" # Exposes backend on host port 3001
+    environment:
+      NODE_ENV: development # Or 'production' as needed
+      # PORT: 3001 # Already defined in backend.js as default, but can be set here
+      # OPENAI_API_KEY: "your_openai_api_key_here" # Example: This should be managed securely, e.g., via .env file
+    volumes:
+      - ./backend:/usr/src/app # Mounts the backend code for development (optional for production)
+      - /usr/src/app/node_modules # Excludes node_modules from being overwritten by the host mount
+      # Consider adding volumes for persistent data if 'results' or 'uploads' need to persist outside containers
+      # - ./backend/uploads:/usr/src/app/uploads
+      # - ./backend/results:/usr/src/app/results
+    # If you have a .env file in the backend directory for environment variables:
+    # env_file:
+    #   - ./backend/.env
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"       # Exposes frontend on host port 80
+    depends_on:
+      - backend       # Ensures backend starts before frontend (optional, good practice)
+    volumes:
+      - ./frontend:/app # Mounts the frontend code for development (optional for production)
+      - /app/node_modules # Excludes node_modules from being overwritten by the host mount
+
+volumes:
+  # Define named volumes if you want to persist data across container restarts more robustly
+  # backend_uploads:
+  # backend_results:
