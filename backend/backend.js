@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 3001;
 
 const uploadsDir = path.join(__dirname, 'uploads');
 const resultsDir = path.join(__dirname, 'results');
+const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist');
 
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 if (!fs.existsSync(resultsDir)) fs.mkdirSync(resultsDir, { recursive: true });
@@ -39,6 +40,7 @@ const upload = multer({ storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(frontendDistPath));
 app.use('/results', express.static(resultsDir));
 
 app.get('/health', (req, res) => {
@@ -119,6 +121,11 @@ app.post('/api/generate-ads', upload.array('image', 5), async (req, res) => {
       message: error.message || 'Server error while generating ad images',
     });
   }
+});
+
+// Catch-all GET route to serve index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendDistPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
